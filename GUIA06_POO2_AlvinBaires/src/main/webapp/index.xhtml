@@ -23,6 +23,19 @@ and open the template in the editor.
         <h:outputScript library="js/custom" name="mens.js"/>
         <link rel="shortcut icon" type="image/x-icon" href="#{resource['images/favicon.ico']}"/>
 
+        <style>
+            .field-error
+            {
+                color: #a94442; 
+                display: block;
+                font-size: 10px;
+            }
+            .field-error:first-letter
+            {
+                text-transform: capitalize;
+            }
+        </style>
+       
     </h:head>
     <h:body style="background-image: url('resources/images/bg_2.png'); width:100%;">
         <div class="row" style="width: 100%">
@@ -35,28 +48,34 @@ and open the template in the editor.
                             <div class="form-group">
                                 <h:outputLabel  for="nomb" value="Nombre: "/>
                                 <h:inputText id="nomb" value="#{alumnosBean.objeAlum.nombAlum}" class="form-control" />
+                                <h:message for="nomb" errorClass="field-error" />
                             </div>
                             <div class="form-group">
                                 <h:outputLabel  for="apel" value="Apellido: "/>
                                 <h:inputText id="apel" value="#{alumnosBean.objeAlum.apelAlum}" class="form-control" />
+                                <h:message for="apel" errorClass="field-error" />
                             </div>
                             <div class="form-group">
                                 <h:outputLabel  for="fechNaci" value="Fecha Nacimiento: "/>
                                 <h:inputText id="fechNaci" value="#{alumnosBean.objeAlum.fechNaciAlum}" class="form-control">
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:inputText>
+                                <h:message for="fechNaci" errorClass="field-error" />
                             </div>
                             <div class="form-group">
                                 <h:outputLabel  for="mail" value="E-mail: "/>
                                 <h:inputText id="mail" value="#{alumnosBean.objeAlum.mailAlum}" class="form-control" />
+                                <h:message for="mail" errorClass="field-error" />
                             </div>
                             <div class="form-group">
                                 <h:outputLabel  for="tele" value="Teléfono: "/>
                                 <h:inputText id="tele" value="#{alumnosBean.objeAlum.teleAlum}" class="form-control" />
+                                <h:message for="tele" errorClass="field-error" />
                             </div>
                             <div class="form-group">
                                 <h:outputLabel  for="dire" value="Dirección: "/>
                                 <h:inputText id="dire" value="#{alumnosBean.objeAlum.direAlum}" class="form-control" />
+                                <h:message for="dire" errorClass="field-error" />
                             </div>
                             <div class="form-group">
                                 <h:outputLabel  for="gene" value="Género: "/>
@@ -64,6 +83,7 @@ and open the template in the editor.
                                     <f:selectItem itemValue="M" itemLabel="Masculino"/>
                                     <f:selectItem itemValue="F" itemLabel="Femenino"/>
                                 </h:selectOneMenu>
+                                <h:message for="gene" errorClass="field-error" />
                             </div>
                             <div class="form-group">
                                 <div style="display: inline-block">

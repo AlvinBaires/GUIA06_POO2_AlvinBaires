@@ -5,12 +5,14 @@
  */
 package com.sv.udb.controlador;
 
+import com.sv.udb.ejb.AlumnosFacadeLocal;
 import com.sv.udb.modelo.Alumnos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.persistence.EntityManager;
@@ -28,6 +30,8 @@ import org.primefaces.context.RequestContext;
 @ViewScoped
 @ManagedBean
 public class AlumnosBean implements Serializable{
+    @EJB
+    private AlumnosFacadeLocal FCDEalumnosFacade;    
     private Alumnos objeAlum;
     private boolean guardar;
     private List<Alumnos> alumList = null;
@@ -60,101 +64,70 @@ public class AlumnosBean implements Serializable{
     {
         this.objeAlum = new Alumnos();
         this.guardar = true;
-        this.alumList = this.ConsTodo();
+        ConsTodo();
     }
     
-    public List<Alumnos> ConsTodo() {
-        List<Alumnos> resp = new ArrayList<>();
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
-        EntityManager em = emf.createEntityManager();
+    public void ConsTodo() {
         try 
         {
-            TypedQuery<Alumnos> query = em.createNamedQuery("Alumnos.findAll", Alumnos.class);
-            resp = query.getResultList();
+            this.alumList=FCDEalumnosFacade.findAll();
         } 
         catch (Exception ex) 
         {
 
         }
-        return resp;
     }
     
     public void guar()
     {
-        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturar el contexto
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
+        RequestContext ctx = RequestContext.getCurrentInstance();
         try
         {
-            em.persist(this.objeAlum);
-            tx.commit();
-            this.guardar = true;
-            this.alumList = this.ConsTodo();
+            FCDEalumnosFacade.create(this.objeAlum);
             this.objeAlum = new Alumnos();
+            ConsTodo();
             ctx.execute("setMessage('MESS_SUCC', 'Alerta', 'Datos guardados exitosamente');");
         }
         catch(Exception ex)
         {
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al guardar datos.');");
-            tx.rollback();
-            ex.printStackTrace();
         }
         finally
         {
-            em.close();
-            emf.close();            
+            
         }
     }
     
     public void modi()
     {
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturar el contexto
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
         try
         {
-            em.merge(objeAlum);
-            tx.commit();
-            this.alumList = this.ConsTodo();
+            FCDEalumnosFacade.edit(this.objeAlum);
+            ConsTodo();
             this.objeAlum = new Alumnos();
             ctx.execute("setMessage('MESS_SUCC', 'Alerta', 'Registro modificado exitosamente.');");
         }
         catch(Exception ex)
         {
-            tx.rollback();
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al modificar registro.');");
         }
-        em.close();
-        emf.close();
     }
     
     public void elim(int codi)
     {
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturar el contexto
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
         try
         {
-            Alumnos obj = em.find(Alumnos.class, codi);
-            em.remove(obj);
-            tx.commit();
-            this.alumList = this.ConsTodo();
+            FCDEalumnosFacade.remove(this.objeAlum);
+            ConsTodo();
             this.objeAlum = new Alumnos();
             ctx.execute("setMessage('MESS_SUCC', 'Alerta', 'Registro eliminado exitosamente.');");
         }
         catch(Exception ex)
         {
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al eliminar registro.');");
-            tx.rollback();
         }
-        em.close();
-        emf.close();
     }
     
     public void cons(int codi)
