@@ -13,6 +13,7 @@ import java.util.List;
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.persistence.EntityManager;
@@ -133,12 +134,11 @@ public class AlumnosBean implements Serializable{
     public void cons(int codi)
     {
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturar el contexto
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
-        EntityManager em = emf.createEntityManager();
+        //int codi = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nombreParametro"));
         try
-        {
+        {            
+            this.objeAlum = FCDEalumnosFacade.find(codi);
             ctx.execute("setMessage('MESS_SUCC', 'Alerta', 'Registro consultado.');");
-            this.objeAlum = em.find(Alumnos.class, codi);
         }
         catch(Exception ex)
         {            
@@ -147,8 +147,7 @@ public class AlumnosBean implements Serializable{
         }
         finally
         {            
-            em.close();
-            emf.close();            
+            
         }
     }
 }
