@@ -138,7 +138,8 @@ public class AlumnosBean implements Serializable{
         try
         {            
             this.objeAlum = FCDEalumnosFacade.find(codi);
-            ctx.execute("setMessage('MESS_SUCC', 'Alerta', 'Registro consultado.');");
+            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Consultado a " + 
+                    String.format("%s %s", this.objeAlum.getNombAlum(), this.objeAlum.getApelAlum()) + "')");
         }
         catch(Exception ex)
         {            
