@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.sv.udb.modelo;
 
 import java.io.Serializable;
@@ -7,7 +12,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -81,7 +85,7 @@ public class Alumnos implements Serializable {
     @NotNull
     @Column(name = "gene_alum")
     private Character geneAlum;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiAlum", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiAlum")
     private List<GruposAlumnos> gruposAlumnosList;
 
     public Alumnos() {

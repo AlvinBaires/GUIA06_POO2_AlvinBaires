@@ -9,7 +9,6 @@ import com.sv.udb.ejb.GruposFacadeLocal;
 import com.sv.udb.modelo.Grupos;
 import java.io.Serializable;
 import java.util.List;
-import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -17,25 +16,27 @@ import javax.faces.view.ViewScoped;
 
 /**
  *
- * @author Laboratorio
+ * @author Mauricio
  */
 @Named(value = "gruposBean")
 @ViewScoped
-@ManagedBean
 public class GruposBean implements Serializable{
+
     @EJB
-    private GruposFacadeLocal FCDEGrupos;    
+    private GruposFacadeLocal FCDEGrupos;
+    
     private List<Grupos> listGrup;
+    /**
+     * Creates a new instance of GruposBean
+     */
+    public GruposBean() {
+    }
     
     @PostConstruct
     public void init()
     {
         this.listGrup = FCDEGrupos.findAll();
     }
-    
-    public GruposBean() {
-        
-    }    
 
     public List<Grupos> getListGrup() {
         return listGrup;
@@ -44,6 +45,7 @@ public class GruposBean implements Serializable{
     public void setListGrup(List<Grupos> listGrup) {
         this.listGrup = listGrup;
     }
+    
     
     
 }
