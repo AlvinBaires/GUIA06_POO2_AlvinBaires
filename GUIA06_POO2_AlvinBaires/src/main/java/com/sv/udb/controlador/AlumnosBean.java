@@ -75,7 +75,7 @@ public class AlumnosBean implements Serializable{
         } 
         catch (Exception ex) 
         {
-
+            ex.printStackTrace();
         }
     }
     
