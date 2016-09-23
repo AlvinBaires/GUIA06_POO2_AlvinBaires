@@ -90,15 +90,15 @@ and open the template in the editor.
                                         <p:ajax listener="#{cursosBean.limpForm()}" process="@form" update="@form" global="true"/>
                                         <i class="fa fa-mail-forward"/> Cancelar
                                     </h:commandLink>
-                                    <h:commandLink id="btonGuar" class="btn btn-success btn-xs" rendered="#{alumnosBean.guardar}">
+                                    <h:commandLink id="btonGuar" class="btn btn-success btn-xs" rendered="#{cursosBean.guardar}">
                                         <p:ajax listener="#{cursosBean.guar()}" process="@form" update="@form :ContDato" oncomplete="INIT_OBJE();" />
                                         <i class="fa fa-plus"/> Guardar
                                     </h:commandLink>
-                                    <h:commandLink id="btonModi" class="btn btn-primary btn-xs" rendered="#{!alumnosBean.guardar}">
+                                    <h:commandLink id="btonModi" class="btn btn-primary btn-xs" rendered="#{!cursosBean.guardar}">
                                         <p:ajax listener="#{cursosBean.modi()}" process="@form" update="@form :ContDato" oncomplete="INIT_OBJE();" />
                                         <i class="fa fa-edit"/> Modificar
                                     </h:commandLink>
-                                    <h:outputLink id="btonElim" class="btn btn-danger btn-xs" rendered="#{!alumnosBean.guardar}" 
+                                    <h:outputLink id="btonElim" class="btn btn-danger btn-xs" rendered="#{!cursosBean.guardar}" 
                                         pt:data-toggle="confirmation" pt:data-btn-ok-label="Sí" pt:data-btn-ok-icon="fa fa-times"
                                         pt:data-btn-ok-class="btn-danger btn-xs" pt:data-btn-cancel-label="No" pt:data-btn-cancel-icon="fa fa-mail-forward"
                                         pt:data-btn-cancel-class="btn-default btn-xs" pt:data-title="¿Esta seguro que desea eliminar?">

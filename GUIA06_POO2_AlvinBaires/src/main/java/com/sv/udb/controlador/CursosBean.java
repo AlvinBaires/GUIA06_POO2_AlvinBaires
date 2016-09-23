@@ -31,6 +31,68 @@ public class CursosBean implements Serializable{
     /**
      * Creates a new instance of CursosBean
      */
+    
+    public void guar()
+    {
+        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
+        try
+        {
+            FCDECursos.create(this.objeCurs);
+            this.listCurs.add(this.objeCurs);
+            this.limpForm();
+            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')");
+        }
+        catch(Exception ex)
+        {
+            ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al guardar ')");
+        }
+        finally
+        {
+            
+        }
+    }
+    
+    public void modi()
+    {
+        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
+        try
+        {
+            this.listCurs.remove(this.objeCurs); //Limpia el objeto viejo
+            FCDECursos.edit(this.objeCurs);
+            this.listCurs.add(this.objeCurs); //Agrega el objeto modificado
+            this.limpForm();
+            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Modificados')");
+        }
+        catch(Exception ex)
+        {
+            ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al modificar ')");
+        }
+        finally
+        {
+            
+        }
+    }
+    
+    public void elim()
+    {
+        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
+        try
+        {
+            FCDECursos.remove(this.objeCurs);
+            this.listCurs.remove(this.objeCurs);
+            this.limpForm();
+            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Eliminados')");
+        }
+        catch(Exception ex)
+        {
+            ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al eliminar')");
+        }
+        finally
+        {
+            
+        }
+    }
+    
     public CursosBean() {
     }
     
@@ -95,6 +157,14 @@ public class CursosBean implements Serializable{
 
     public void setObjeCurs(Cursos objeCurs) {
         this.objeCurs = objeCurs;
+    }
+
+    public boolean isGuardar() {
+        return guardar;
+    }
+
+    public void setGuardar(boolean guardar) {
+        this.guardar = guardar;
     }
     
     
