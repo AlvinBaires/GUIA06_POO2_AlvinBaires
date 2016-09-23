@@ -157,9 +157,5 @@ public class AlumnosBean implements Serializable{
         {
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al consultar')");
         }
-        finally
-        {
-            
-        }
     }
 }
