@@ -5,8 +5,8 @@
  */
 package com.sv.udb.controlador;
 
-import com.sv.udb.ejb.GruposFacadeLocal;
-import com.sv.udb.modelo.Grupos;
+import com.sv.udb.ejb.*;
+import com.sv.udb.modelo.*;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -18,21 +18,78 @@ import org.primefaces.context.RequestContext;
 
 /**
  *
- * @author Mauricio
+ * @author Laboratorio
  */
-@Named(value = "gruposBean")
+@Named(value = "profesoresBean")
 @ViewScoped
-public class GruposBean implements Serializable{
-
+public class ProfesoresBean implements Serializable{
     @EJB
-    private GruposFacadeLocal FCDEGrupos;    
-    private List<Grupos> listGrup;
+    private ProfesoresFacadeLocal FCDEProfesores;    
+    private Profesores objeProf;
+    private List<Profesores> listProf;
     private boolean guardar;
-    private Grupos objeGrup;
     /**
-     * Creates a new instance of GruposBean
+     * Creates a new instance of ProfesoresBean
      */
-    public GruposBean() {
+    
+    public void guar()
+    {
+        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
+        try
+        {
+            FCDEProfesores.create(this.objeProf);
+            this.listProf.add(this.objeProf);
+            this.limpForm();
+            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')");
+        }
+        catch(Exception ex)
+        {
+            ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al guardar ')");
+        }
+    }
+    
+    public void modi()
+    {
+        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
+        try
+        {
+            this.listProf.remove(this.objeProf); //Limpia el objeto viejo
+            FCDEProfesores.edit(this.objeProf);
+            this.listProf.add(this.objeProf); //Agrega el objeto modificado
+            this.limpForm();
+            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Modificados')");
+        }
+        catch(Exception ex)
+        {
+            ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al modificar ')");
+        }
+        finally
+        {
+            
+        }
+    }
+    
+    public void elim()
+    {
+        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
+        try
+        {
+            FCDEProfesores.remove(this.objeProf);
+            this.listProf.remove(this.objeProf);
+            this.limpForm();
+            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Eliminados')");
+        }
+        catch(Exception ex)
+        {
+            ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al eliminar')");
+        }
+        finally
+        {
+            
+        }
+    }
+    
+    public ProfesoresBean() {
     }
     
     @PostConstruct
@@ -44,94 +101,15 @@ public class GruposBean implements Serializable{
     
     public void limpForm()
     {
-        this.objeGrup = new Grupos();
+        this.objeProf = new Profesores();
         this.guardar = true;        
-    }
-
-    public List<Grupos> getListGrup() {
-        return listGrup;
-    }
-
-    public void setListGrup(List<Grupos> listGrup) {
-        this.listGrup = listGrup;
-    }
-
-    public boolean isGuardar() {
-        return guardar;
-    }
-
-    public void setGuardar(boolean guardar) {
-        this.guardar = guardar;
-    }
-
-    public Grupos getObjeGrup() {
-        return objeGrup;
-    }
-
-    public void setObjeGrup(Grupos objeGrup) {
-        this.objeGrup = objeGrup;
-    }
-    
-    
-    
-    public void guar()
-    {
-        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
-        try
-        {
-            FCDEGrupos.create(this.objeGrup);
-            this.listGrup.add(this.objeGrup);
-            this.limpForm();
-            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')");
-        }
-        catch(Exception ex)
-        {
-            ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al guardar ')");
-        }
-        finally
-        {
-            
-        }
-    }
-    
-    public void modi()
-    {
-        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
-        try
-        {
-            this.listGrup.remove(this.objeGrup); //Limpia el objeto viejo
-            FCDEGrupos.edit(this.objeGrup);
-            this.listGrup.add(this.objeGrup); //Agrega el objeto modificado
-            this.limpForm();
-            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Modificados')");
-        }
-        catch(Exception ex)
-        {
-            ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al modificar ')");
-        }
-    }
-    
-    public void elim()
-    {
-        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
-        try
-        {
-            FCDEGrupos.remove(this.objeGrup);
-            this.listGrup.remove(this.objeGrup);
-            this.limpForm();
-            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Eliminados')");
-        }
-        catch(Exception ex)
-        {
-            ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al eliminar')");
-        }
     }
     
     public void consTodo()
     {
         try
         {
-            this.listGrup = FCDEGrupos.findAll();
+            this.listProf = FCDEProfesores.findAll();
         }
         catch(Exception ex)
         {
@@ -145,10 +123,10 @@ public class GruposBean implements Serializable{
         int codi = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("codiPara"));
         try
         {
-            this.objeGrup = FCDEGrupos.find(codi);
+            this.objeProf = FCDEProfesores.find(codi);
             this.guardar = false;
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Consultado a " + 
-                    String.format("%s", this.objeGrup.getNombGrup()) + "')");
+                    String.format("%s %s", this.objeProf.getNombProf(), this.objeProf.getApelProf()) + "')");
         }
         catch(Exception ex)
         {
@@ -156,7 +134,32 @@ public class GruposBean implements Serializable{
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al consultar')");
         }
     }
+
+    public Profesores getObjeProf() {
+        return objeProf;
+    }
+
+    public void setObjeProf(Profesores objeProf) {
+        this.objeProf = objeProf;
+    }
+
+    public List<Profesores> getListProf() {
+        return listProf;
+    }
+
+    public void setListProf(List<Profesores> listProf) {
+        this.listProf = listProf;
+    }
+
+        
+    public boolean isGuardar() {
+        return guardar;
+    }
+
+    public void setGuardar(boolean guardar) {
+        this.guardar = guardar;
+    }
     
     
-    
+        
 }
