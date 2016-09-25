@@ -7,6 +7,7 @@ package com.sv.udb.controlador;
 
 import com.sv.udb.ejb.AlumnosFacadeLocal;
 import com.sv.udb.modelo.Alumnos;
+import groovy.util.logging.Log4j;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -28,7 +30,7 @@ public class AlumnosBean implements Serializable{
     private Alumnos objeAlum;
     private List<Alumnos> listAlum;
     private boolean guardar;
-
+    private Logger logger = Logger.getLogger(AlumnosBean.class);
     public Alumnos getObjeAlum() {
         return objeAlum;
     }
@@ -152,6 +154,7 @@ public class AlumnosBean implements Serializable{
             this.guardar = false;
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Consultado a " + 
                     String.format("%s %s", this.objeAlum.getNombAlum(), this.objeAlum.getApelAlum()) + "')");
+            logger.info("CONSULTADO "  + this.objeAlum.getNombAlum());
         }
         catch(Exception ex)
         {
