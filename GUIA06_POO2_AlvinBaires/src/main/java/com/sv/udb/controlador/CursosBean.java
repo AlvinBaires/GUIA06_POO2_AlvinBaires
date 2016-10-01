@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -28,6 +29,7 @@ public class CursosBean implements Serializable{
     private Cursos objeCurs;
     private List<Cursos> listCurs;
     private boolean guardar;
+    private Logger logger = Logger.getLogger(CursosBean.class);
     /**
      * Creates a new instance of CursosBean
      */
@@ -38,17 +40,15 @@ public class CursosBean implements Serializable{
         try
         {
             FCDECursos.create(this.objeCurs);
+            logger.info("Guardado: " + this.objeCurs.getNombCurs());
             this.listCurs.add(this.objeCurs);
             this.limpForm();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al guardar", ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al guardar ')");
-        }
-        finally
-        {
-            
         }
     }
     
@@ -60,16 +60,14 @@ public class CursosBean implements Serializable{
             this.listCurs.remove(this.objeCurs); //Limpia el objeto viejo
             FCDECursos.edit(this.objeCurs);
             this.listCurs.add(this.objeCurs); //Agrega el objeto modificado
+            logger.info("Modificado: " + this.objeCurs.getNombCurs());
             this.limpForm();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Modificados')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al modificar",ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al modificar ')");
-        }
-        finally
-        {
-            
         }
     }
     
@@ -80,16 +78,14 @@ public class CursosBean implements Serializable{
         {
             FCDECursos.remove(this.objeCurs);
             this.listCurs.remove(this.objeCurs);
+            logger.info("Error" + this.objeCurs.getNombCurs());
             this.limpForm();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Eliminados')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al eliminar: ", ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al eliminar')");
-        }
-        finally
-        {
-            
         }
     }
     
@@ -117,11 +113,8 @@ public class CursosBean implements Serializable{
         }
         catch(Exception ex)
         {
+            logger.error("Error al consultar registros ", ex);
             ex.printStackTrace();
-        }
-        finally
-        {
-            
         }
     }
     
@@ -135,10 +128,12 @@ public class CursosBean implements Serializable{
             this.guardar = false;
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Consultado a " + 
                     String.format("%s", this.objeCurs.getNombCurs()) + "')");
+            logger.info("Consultado " + this.objeCurs.getNombCurs());
         }
         catch(Exception ex)
         {
             ex.printStackTrace();
+            logger.error("Error al consultar", ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al consultar')");
         }
     }

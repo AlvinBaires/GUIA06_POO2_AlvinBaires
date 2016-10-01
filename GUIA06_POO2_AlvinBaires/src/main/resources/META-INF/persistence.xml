@@ -3,6 +3,5 @@
   <persistence-unit name="POOPU" transaction-type="JTA">
     <jta-data-source>jdbc/PooPool</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
   </persistence-unit>
 </persistence>

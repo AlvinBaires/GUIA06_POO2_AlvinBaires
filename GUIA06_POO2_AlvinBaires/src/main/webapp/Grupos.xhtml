@@ -91,13 +91,17 @@ and open the template in the editor.
                             
                             <div class="input-group input-group-xs">
                                 <h:outputLabel  for="horaInic" value="Hora Inicio "/>
-                                <h:inputText id="horaInic" value="#{gruposBean.objeGrup.horaInicGrup}" class="form-control"/>
+                                <h:inputText id="horaInic" value="#{gruposBean.objeGrup.horaInicGrup}" class="form-control">
+                                    <f:validateRegex pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" />
+                                </h:inputText>
                                 <h:message for="horaInic" errorClass="field-error" />
                             </div>
                             
                             <div class="input-group input-group-xs">
                                 <h:outputLabel  for="horaFina" value="Hora finalizacion "/>
-                                <h:inputText id="horaFina" value="#{gruposBean.objeGrup.horaFinaGrup}" class="form-control"/>
+                                <h:inputText id="horaFina" value="#{gruposBean.objeGrup.horaFinaGrup}" class="form-control">
+                                    <f:validateRegex pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" />
+                                </h:inputText>
                                 <h:message for="horaFina" errorClass="field-error" />
                             </div>
                             

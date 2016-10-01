@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -28,6 +29,7 @@ public class ProfesoresBean implements Serializable{
     private Profesores objeProf;
     private List<Profesores> listProf;
     private boolean guardar;
+    private Logger logger = Logger.getLogger(ProfesoresBean.class);
     /**
      * Creates a new instance of ProfesoresBean
      */
@@ -39,11 +41,13 @@ public class ProfesoresBean implements Serializable{
         {
             FCDEProfesores.create(this.objeProf);
             this.listProf.add(this.objeProf);
+            logger.info("Guardado " +this.objeProf.getNombProf() + " " + this.objeProf.getApelProf());
             this.limpForm();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al guardar", ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al guardar ')");
         }
     }
@@ -56,16 +60,14 @@ public class ProfesoresBean implements Serializable{
             this.listProf.remove(this.objeProf); //Limpia el objeto viejo
             FCDEProfesores.edit(this.objeProf);
             this.listProf.add(this.objeProf); //Agrega el objeto modificado
+            logger.info("Modificado " +this.objeProf.getNombProf() + " " + this.objeProf.getApelProf());
             this.limpForm();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Modificados')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al modificar ", ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al modificar ')");
-        }
-        finally
-        {
-            
         }
     }
     
@@ -76,16 +78,14 @@ public class ProfesoresBean implements Serializable{
         {
             FCDEProfesores.remove(this.objeProf);
             this.listProf.remove(this.objeProf);
+            logger.info("Eliminado" +this.objeProf.getNombProf() + " " + this.objeProf.getApelProf());
             this.limpForm();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Eliminados')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al eliminar ", ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al eliminar')");
-        }
-        finally
-        {
-            
         }
     }
     
@@ -113,6 +113,7 @@ public class ProfesoresBean implements Serializable{
         }
         catch(Exception ex)
         {
+            logger.error("Error al consultar todo ",ex);
             ex.printStackTrace();
         }
     }
@@ -127,9 +128,11 @@ public class ProfesoresBean implements Serializable{
             this.guardar = false;
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Consultado a " + 
                     String.format("%s %s", this.objeProf.getNombProf(), this.objeProf.getApelProf()) + "')");
+            logger.info("Consultado " +this.objeProf.getNombProf() + " " + this.objeProf.getApelProf());
         }
         catch(Exception ex)
         {
+            logger.error("Error al consultar ", ex);
             ex.printStackTrace();
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al consultar')");
         }

@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -29,6 +30,7 @@ public class GruposBean implements Serializable{
     private List<Grupos> listGrup;
     private boolean guardar;
     private Grupos objeGrup;
+    private Logger logger = Logger.getLogger(GruposBean.class);
     /**
      * Creates a new instance of GruposBean
      */
@@ -81,16 +83,14 @@ public class GruposBean implements Serializable{
         {
             FCDEGrupos.create(this.objeGrup);
             this.listGrup.add(this.objeGrup);
+            logger.info("Guardado " + this.objeGrup.getNombGrup());
             this.limpForm();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al guardar ", ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al guardar ')");
-        }
-        finally
-        {
-            
         }
     }
     
@@ -102,11 +102,13 @@ public class GruposBean implements Serializable{
             this.listGrup.remove(this.objeGrup); //Limpia el objeto viejo
             FCDEGrupos.edit(this.objeGrup);
             this.listGrup.add(this.objeGrup); //Agrega el objeto modificado
+            logger.info("Modificado " + this.objeGrup.getNombGrup());
             this.limpForm();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Modificados')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al modificar ", ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al modificar ')");
         }
     }
@@ -118,11 +120,13 @@ public class GruposBean implements Serializable{
         {
             FCDEGrupos.remove(this.objeGrup);
             this.listGrup.remove(this.objeGrup);
+            logger.info("Eliminado " + this.objeGrup.getNombGrup());
             this.limpForm();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Eliminados')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al eliminar", ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al eliminar')");
         }
     }
@@ -135,6 +139,7 @@ public class GruposBean implements Serializable{
         }
         catch(Exception ex)
         {
+            logger.error("Error al consultar todo", ex);
             ex.printStackTrace();
         }
     }
@@ -147,11 +152,13 @@ public class GruposBean implements Serializable{
         {
             this.objeGrup = FCDEGrupos.find(codi);
             this.guardar = false;
+            logger.info("Consultado" + this.objeGrup.getNombGrup());
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Consultado a " + 
                     String.format("%s", this.objeGrup.getNombGrup()) + "')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al consultar", ex);
             ex.printStackTrace();
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al consultar')");
         }

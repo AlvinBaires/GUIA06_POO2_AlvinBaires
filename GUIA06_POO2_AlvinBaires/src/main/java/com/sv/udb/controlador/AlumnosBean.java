@@ -7,7 +7,6 @@ package com.sv.udb.controlador;
 
 import com.sv.udb.ejb.AlumnosFacadeLocal;
 import com.sv.udb.modelo.Alumnos;
-import groovy.util.logging.Log4j;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -31,6 +30,7 @@ public class AlumnosBean implements Serializable{
     private List<Alumnos> listAlum;
     private boolean guardar;
     private Logger logger = Logger.getLogger(AlumnosBean.class);
+    
     public Alumnos getObjeAlum() {
         return objeAlum;
     }
@@ -73,38 +73,34 @@ public class AlumnosBean implements Serializable{
         try
         {
             FCDEAlum.create(this.objeAlum);
-            this.listAlum.add(this.objeAlum);
-            this.limpForm();
+            logger.info("Guardado: " + this.objeAlum.getNombAlum()+" " + this.objeAlum.getApelAlum());
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')");
+            this.listAlum.add(this.objeAlum);
+            this.limpForm();            
         }
         catch(Exception ex)
         {
+            logger.error("Error al guardar: ", ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al guardar ')");
-        }
-        finally
-        {
-            
         }
     }
     
     public void modi()
     {
-        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
+        RequestContext ctx = RequestContext.getCurrentInstance();
         try
         {
-            this.listAlum.remove(this.objeAlum); //Limpia el objeto viejo
+            this.listAlum.remove(this.objeAlum);
             FCDEAlum.edit(this.objeAlum);
-            this.listAlum.add(this.objeAlum); //Agrega el objeto modificado
+            logger.info("Modificado: "+this.objeAlum.getNombAlum()+" "+this.objeAlum.getApelAlum());
+            this.listAlum.add(this.objeAlum);
             this.limpForm();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Modificados')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al modificar: ",ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al modificar ')");
-        }
-        finally
-        {
-            
         }
     }
     
@@ -115,16 +111,14 @@ public class AlumnosBean implements Serializable{
         {
             FCDEAlum.remove(this.objeAlum);
             this.listAlum.remove(this.objeAlum);
+            logger.info("Eliminado: " + this.objeAlum.getNombAlum()+" " +this.objeAlum.getApelAlum());
             this.limpForm();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos Eliminados')");
         }
         catch(Exception ex)
         {
+            logger.error("Error al eliminar: ", ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al eliminar')");
-        }
-        finally
-        {
-            
         }
     }
     
@@ -136,11 +130,8 @@ public class AlumnosBean implements Serializable{
         }
         catch(Exception ex)
         {
+            logger.error("Error al consultar registros ", ex);
             ex.printStackTrace();
-        }
-        finally
-        {
-            
         }
     }
     
@@ -152,12 +143,13 @@ public class AlumnosBean implements Serializable{
         {
             this.objeAlum = FCDEAlum.find(codi);
             this.guardar = false;
+            logger.info("Consultado " + this.objeAlum.getNombAlum()+" "+this.objeAlum.getApelAlum());
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Consultado a " + 
                     String.format("%s %s", this.objeAlum.getNombAlum(), this.objeAlum.getApelAlum()) + "')");
-            logger.info("CONSULTADO "  + this.objeAlum.getNombAlum());
         }
         catch(Exception ex)
         {
+            logger.error("Error al consultar registro",ex);
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al consultar')");
         }
     }
